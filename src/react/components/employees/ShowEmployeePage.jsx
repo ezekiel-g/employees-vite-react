@@ -127,7 +127,7 @@ const ShowEmployeePage = () => {
           </tr>
           <tr>
             <td>Active</td>
-            <td>{employee.is_active === 1 ? 'Yes' : 'No'}</td>
+            <td>{employee.is_active === true ? 'Yes' : 'No'}</td>
           </tr>
           <tr>
             <td>Hire date</td>

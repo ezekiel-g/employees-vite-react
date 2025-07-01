@@ -22,7 +22,7 @@ vi.mock('../../../../util/validateEmployee.js', () => ({
         email: 'john.doe@example.com',
         country_code: '1',
         phone_number: '1234567890',
-        is_active: 1,
+        is_active: true,
         hire_date: '2020-01-01',
       },
     ]),
@@ -54,7 +54,7 @@ const originalEmployee = {
   email: 'john.doe@example.com',
   countryCode: '1',
   phoneNumber: '1234567890',
-  isActive: 1,
+  isActive: true,
   hireDate: '2020-01-01',
 };
 
@@ -66,7 +66,7 @@ const updatedEmployee = {
   email: 'michael.smith@example.com',
   countryCode: '1',
   phoneNumber: '9876543210',
-  isActive: 0,
+  isActive: false,
   hireDate: '2021-05-10',
 };
 

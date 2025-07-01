@@ -18,7 +18,7 @@ describe('ShowEmployeePage', () => {
       email: 'alice.smith@example.com',
       country_code: '1',
       phone_number: '5551234567',
-      is_active: 1,
+      is_active: true,
       hire_date: '2024-05-01T00:00:00',
       created_at: '2025-06-10T01:26:09',
       updated_at: '2025-06-10T01:26:09',
