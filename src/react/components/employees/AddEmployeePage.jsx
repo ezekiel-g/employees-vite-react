@@ -233,7 +233,7 @@ const AddEmployeePage = () => {
             </label>
           </div>
         </div>
-        
+
         <div className="mb-3">
           <label htmlFor="hireDate" className="form-label">
             Hire date

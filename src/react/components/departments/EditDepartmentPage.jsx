@@ -108,7 +108,7 @@ const EditDepartmentPage = () => {
             onChange={(event) => setCode(event.target.value)}
           />
         </div>
-        
+
         <div className="mb-3">
           <label htmlFor="location" className="form-label">
             Location
