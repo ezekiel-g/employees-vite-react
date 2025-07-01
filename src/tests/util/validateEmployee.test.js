@@ -12,7 +12,7 @@ describe('validateEmployee', () => {
     email: 'john.doe@example.com',
     countryCode: '1',
     phoneNumber: '1234567890',
-    isActive: 1,
+    isActive: true,
     departmentId: 1,
     hireDate: '2023-01-01',
   };
@@ -31,7 +31,7 @@ describe('validateEmployee', () => {
       email: 'john.doe@example.com',
       country_code: '1',
       phone_number: '1234567890',
-      is_active: 1,
+      is_active: true,
       department_id: 1,
       hire_date: '2023-01-01',
     },
@@ -43,7 +43,7 @@ describe('validateEmployee', () => {
       email: 'jane.smith@example.com',
       country_code: '44',
       phone_number: '9876543210',
-      is_active: 1,
+      is_active: true,
       department_id: 2,
       hire_date: '2022-06-15',
     },
@@ -228,7 +228,7 @@ describe('validateEmployee', () => {
 
     expect(validationResult).toEqual({
       valid: false,
-      validationErrors: ['Active status must be 0 or 1'],
+      validationErrors: ['Active status must be true or false'],
     });
   });
 

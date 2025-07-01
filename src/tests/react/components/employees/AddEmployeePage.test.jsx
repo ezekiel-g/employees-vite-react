@@ -39,7 +39,7 @@ describe('AddEmployeePage', () => {
     email: 'jane.doe@example.com',
     countryCode: '1',
     phoneNumber: '5551234567',
-    isActive: 1,
+    isActive: true,
     hireDate: '2023-01-01',
   };
 

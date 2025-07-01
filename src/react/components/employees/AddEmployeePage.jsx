@@ -12,7 +12,7 @@ const AddEmployeePage = () => {
   const [email, setEmail] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [isActive, setIsActive] = useState(1);
+  const [isActive, setIsActive] = useState(true);
   const [hireDate, setHireDate] = useState('');
   const [successMessages, setSuccessMessages] = useState([]);
   const [errorMessages, setErrorMessages] = useState([]);
@@ -68,7 +68,7 @@ const AddEmployeePage = () => {
       setDepartmentId('');
       setCountryCode('');
       setPhoneNumber('');
-      setIsActive(1);
+      setIsActive(true);
       setSuccessMessages(['Employee added successfully']);
       return;
     }
@@ -223,8 +223,10 @@ const AddEmployeePage = () => {
               type="checkbox"
               className="form-check-input rounded-0"
               id="isActive"
-              checked={isActive === 1}
-              onChange={(event) => setIsActive(event.target.checked ? 1 : 0)}
+              checked={isActive === true}
+              onChange={
+                (event) => setIsActive(event.target.checked ? true : false)
+              }
             />
             <label className="form-check-label" htmlFor="isActive">
               Active

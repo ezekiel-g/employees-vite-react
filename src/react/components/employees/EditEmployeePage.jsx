@@ -14,7 +14,7 @@ const EditEmployeePage = () => {
   const [email, setEmail] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [isActive, setIsActive] = useState(1);
+  const [isActive, setIsActive] = useState(true);
   const [hireDate, setHireDate] = useState('');
   const [successMessages, setSuccessMessages] = useState([]);
   const [errorMessages, setErrorMessages] = useState([]);
@@ -97,7 +97,7 @@ const EditEmployeePage = () => {
     const fetchResult = await fetchFromBackEnd(
       `${backEndUrl}/api/v1/employees/${id}`,
     );
-
+    console.log('fetchResult:', fetchResult)
     if (fetchResult.status >= 200 && fetchResult.status < 300) {
       setEmployee(fetchResult.data[0]);
       setFirstName(fetchResult.data[0]?.first_name);
@@ -259,8 +259,10 @@ const EditEmployeePage = () => {
               type="checkbox"
               className="form-check-input rounded-0"
               id="isActive"
-              checked={isActive === 1}
-              onChange={(event) => setIsActive(event.target.checked ? 1 : 0)}
+              checked={isActive === true}
+              onChange={
+                (event) => setIsActive(event.target.checked ? true : false)
+              }
             />
             <label className="form-check-label" htmlFor="isActive">
               Active

@@ -147,8 +147,8 @@ const validatePhoneNumber = (input, currentValue = null) => {
 };
 
 const validateIsActive = (input, currentValue = null) => {
-  if (input !== 0 && input !== 1) {
-    return { valid: false, message: 'Active status must be 0 or 1' };
+  if (input !== true && input !== false) {
+    return { valid: false, message: 'Active status must be true or false' };
   }
 
   return validationHelper.returnSuccess('Active status', input, currentValue);
