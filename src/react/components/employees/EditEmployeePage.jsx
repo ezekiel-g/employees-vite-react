@@ -97,7 +97,7 @@ const EditEmployeePage = () => {
     const fetchResult = await fetchFromBackEnd(
       `${backEndUrl}/api/v1/employees/${id}`,
     );
-    console.log('fetchResult:', fetchResult)
+
     if (fetchResult.status >= 200 && fetchResult.status < 300) {
       setEmployee(fetchResult.data[0]);
       setFirstName(fetchResult.data[0]?.first_name);
@@ -269,7 +269,7 @@ const EditEmployeePage = () => {
             </label>
           </div>
         </div>
-        
+
         <div className="mb-3">
           <label htmlFor="hireDate" className="form-label">
             Hire date

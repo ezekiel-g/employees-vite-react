@@ -59,7 +59,7 @@ export default [
       'react/jsx-uses-react': 'off',
       'react/jsx-uses-vars': 'error',
       'react/jsx-pascal-case': 'error',
-      'react/jsx-indent': ['error', INDENT_SIZE],
+      'react/jsx-indent': ['error', 2],
       'react/jsx-equals-spacing': ['error', 'never'],
       // 'react/jsx-no-bind': 'warn',
       'react-hooks/rules-of-hooks': 'error',
