@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import MainPage from './MainPage';
@@ -9,6 +10,14 @@ import AddEmployeePage from './employees/AddEmployeePage';
 import EditEmployeePage from './employees/EditEmployeePage';
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
   return (
     <>
       <Navbar />
