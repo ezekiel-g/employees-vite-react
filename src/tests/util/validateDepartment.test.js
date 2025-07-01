@@ -12,6 +12,15 @@ describe('validateDepartment', () => {
   ];
   let inputObject;
 
+  const shouldFail = async (field, badValues = []) => {
+    for (let i = 0; i < badValues.length; i++) {
+      inputObject[field] = badValues[i];
+      const validationResult = await validateDepartment(inputObject);
+
+      expect(validationResult.valid).toBe(false);
+    }
+  };
+
   beforeEach(() => {
     inputObject = Object.assign({}, defaultInput);
     validationHelper.checkForDuplicate.mockResolvedValue('pass');
@@ -24,55 +33,23 @@ describe('validateDepartment', () => {
     );
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
+  afterEach(() => vi.clearAllMocks());
 
-  it('returns validation error for empty name', async () => {
-    inputObject.name = '';
+  it('returns { valid: true } if no validation errors', async () => {
     const validationResult = await validateDepartment(inputObject);
 
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Name required'],
-    });
+    expect(validationResult.valid).toEqual(true);
   });
 
-  it('returns validation error for invalid name format', async () => {
-    inputObject.name = 'Name&';
-    const validationResult = await validateDepartment(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: expect.arrayContaining([
-        expect.stringContaining('can be'),
-      ]),
-    });
+  it('validates name format', async () => {
+    await shouldFail('name', ['IT&', '}', 'I'.repeat(101), '', null]);
   });
 
-  it('returns validation error for empty code', async () => {
-    inputObject.code = '';
-    const validationResult = await validateDepartment(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Code required'],
-    });
+  it('validates code format', async () => {
+    await shouldFail('code', ['it', 'IT@', 'I'.repeat(21), '', null]);
   });
 
-  it('returns validation error for invalid code format', async () => {
-    inputObject.code = 'A&';
-    const validationResult = await validateDepartment(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: expect.arrayContaining([
-        expect.stringContaining('can be'),
-      ]),
-    });
-  });
-
-  it('returns validation error for duplicate code', async () => {
+  it('validates code uniqueness', async () => {
     validationHelper.checkForDuplicate.mockResolvedValue('fail');
     const validationResult = await validateDepartment(inputObject);
 
@@ -82,26 +59,8 @@ describe('validateDepartment', () => {
     });
   });
 
-  it('returns validation error for empty location', async () => {
-    inputObject.location = '';
-    const validationResult = await validateDepartment(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Location required'],
-    });
-  });
-
-  it('returns validation error for invalid location', async () => {
-    inputObject.location = 'Chicago';
-    const validationResult = await validateDepartment(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: expect.arrayContaining([
-        expect.stringContaining('Location no'),
-      ]),
-    });
+  it('validates location', async () => {
+    await shouldFail('location', ['Chicago', 'Ur', '', null]);
   });
 
   it('returns error when no changes are detected', async () => {
@@ -111,11 +70,5 @@ describe('validateDepartment', () => {
       valid: false,
       validationErrors: ['No changes detected'],
     });
-  });
-
-  it('returns { valid: true } if no validation errors', async () => {
-    const validationResult = await validateDepartment(inputObject);
-
-    expect(validationResult.valid).toEqual(true);
   });
 });
