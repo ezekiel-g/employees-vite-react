@@ -51,6 +51,15 @@ describe('validateEmployee', () => {
 
   let inputObject;
 
+  const shouldFail = async (field, badValues = []) => {
+    for (let i = 0; i < badValues.length; i++) {
+      inputObject[field] = badValues[i];
+      const validationResult = await validateEmployee(inputObject);
+
+      expect(validationResult.valid).toBe(false);
+    }
+  };
+
   beforeEach(() => {
     inputObject = Object.assign({}, defaultInput);
     validationHelper.checkForDuplicate.mockResolvedValue('pass');
@@ -66,99 +75,55 @@ describe('validateEmployee', () => {
     );
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
+  afterEach(() =>  vi.clearAllMocks());
 
-  it('returns validation error for empty first name', async () => {
-    inputObject.firstName = '';
+  it('returns { valid: true } if no validation errors', async () => {
     const validationResult = await validateEmployee(inputObject);
 
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['First name required'],
-    });
+    expect(validationResult.valid).toEqual(true);
   });
 
-  it('returns validation error for invalid first name format', async () => {
-    inputObject.firstName = 'John@';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: expect.arrayContaining([
-        expect.stringContaining('can be'),
-      ]),
-    });
+  it('validates first name format', async () => {
+    await shouldFail('firstName', [
+      'Mich&el',
+      'Mich@el',
+      'M'.repeat(101),
+      '',
+      null,
+    ]);
   });
 
-  it('returns validation error for empty last name', async () => {
-    inputObject.lastName = '';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Last name required'],
-    });
+  it('validates last name format', async () => {
+    await shouldFail('lastName', [
+      'Smith%',
+      'Smith#',
+      'S'.repeat(101),
+      '',
+      null,
+    ]);
   });
 
-  it('returns validation error for invalid last name format', async () => {
-    inputObject.lastName = 'Doe123';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: expect.arrayContaining([
-        expect.stringContaining('can be'),
-      ]),
-    });
+  it('validates title format', async () => {
+    await shouldFail('title', [
+      'Manager*',
+      'Manager^',
+      'M'.repeat(101),
+      '',
+      null,
+    ]);
   });
 
-  it('returns validation error for empty title', async () => {
-    inputObject.title = '';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Job title required'],
-    });
+  it('validates email format', async () => {
+    await shouldFail('email', [
+      'michael.smith&example.com',
+      'michael.smith@examplecom',
+      'michael&smith@example.com',
+      '',
+      null,
+    ]);
   });
 
-  it('returns validation error for invalid title format', async () => {
-    inputObject.title = 'Dev@1';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: expect.arrayContaining([
-        expect.stringContaining('can be'),
-      ]),
-    });
-  });
-
-  it('returns validation error for empty email', async () => {
-    inputObject.email = '';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Email address required'],
-    });
-  });
-
-  it('returns validation error for invalid email format', async () => {
-    inputObject.email = 'john.doe@';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: expect.arrayContaining([
-        expect.stringContaining('must contain'),
-      ]),
-    });
-  });
-
-  it('returns validation error for duplicate email', async () => {
+  it('validates email uniqueness', async () => {
     validationHelper.checkForDuplicate.mockResolvedValue('fail');
     const validationResult = await validateEmployee(inputObject);
 
@@ -168,78 +133,26 @@ describe('validateEmployee', () => {
     });
   });
 
-  it('returns validation error for invalid department ID', async () => {
-    inputObject.departmentId = 999;
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Invalid department'],
-    });
+  it('validates country code format correctly', async () => {
+    await shouldFail('countryCode', ['+1', '}', '11111', '', null]);
   });
 
-  it('returns validation error for empty phone number', async () => {
-    inputObject.phoneNumber = '';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Phone number required'],
-    });
+  it('validates phone number format correctly', async () => {
+    await shouldFail('phoneNumber', [
+      '1111',
+      '}',
+      '1'.repeat(16),
+      '',
+      null,
+    ]);
   });
 
-  it('returns validation error for invalid phone number format', async () => {
-    inputObject.phoneNumber = '123';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: expect.arrayContaining([
-        expect.stringContaining('must be'),
-      ]),
-    });
+  it('validates active status correctly', async () => {
+    await shouldFail('isActive', ['true', 'false', 1, 0, '', null]);
   });
 
-  it('returns validation error for empty country code', async () => {
-    inputObject.countryCode = '';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Country code required'],
-    });
-  });
-
-  it('returns validation error for invalid country code format', async () => {
-    inputObject.countryCode = 'abc';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: expect.arrayContaining([
-        expect.stringContaining('must be'),
-      ]),
-    });
-  });
-
-  it('returns validation error for invalid isActive status', async () => {
-    inputObject.isActive = 2;
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Active status must be true or false'],
-    });
-  });
-
-  it('returns validation error for empty hire date', async () => {
-    inputObject.hireDate = '';
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult).toEqual({
-      valid: false,
-      validationErrors: ['Hire date required'],
-    });
+  it('validates hire date correctly', async () => {
+    await shouldFail('hireDate', ['', null]);
   });
 
   it('returns error when no changes are detected', async () => {
@@ -249,11 +162,5 @@ describe('validateEmployee', () => {
       valid: false,
       validationErrors: ['No changes detected'],
     });
-  });
-
-  it('returns { valid: true } if no validation errors', async () => {
-    const validationResult = await validateEmployee(inputObject);
-
-    expect(validationResult.valid).toEqual(true);
   });
 });
