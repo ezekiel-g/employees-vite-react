@@ -13,7 +13,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false));
+    setLoading(false)
   }, []);
 
   if (loading) return <div>Loading...</div>;
